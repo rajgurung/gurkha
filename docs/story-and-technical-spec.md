@@ -114,31 +114,33 @@ The board is the approved artistic direction, not an actual screenshot or verifi
 | Area | Proposed specification |
 |---|---|
 | Engine | Unreal Engine 5; select a stable version compatible with the Mac, Xcode and required plugins |
-| Development hardware | Existing Apple M1 MacBook with 16 GB unified memory |
-| Initial platform | macOS; initially target Apple Silicon, with minimum OS version determined by the selected engine |
+| Development hardware | MacBook Pro with Apple M1 Pro (16-core GPU), 16 GB unified memory, macOS 15.7, Xcode 26.1 (checked 11 October 2026) |
+| Initial platform | macOS on Apple Silicon. Minimum player spec: base M1 with 8 GB unified memory. Minimum OS version set by the selected engine |
 | Subsequent platform | Windows, using separate builds and testing on actual Windows hardware |
 | Structure | Single-player, offline campaign; no multiplayer or account system in the first scope |
 | Gameplay code | Blueprint for rapid iteration; C++ where justified by complexity or performance |
 | Models | Tripo-generated starting assets, refined and checked in Blender |
 | Asset workflow | Generate, inspect, correct scale/materials, optimise, create collision, import and test |
 | Characters | Rigging, compatible skeletons, animation and retargeting need explicit setup and validation |
-| Rendering | Conventional mesh level-of-detail workflow for M1; benchmark lighting before selecting the final approach |
+| Rendering | Built for the M1 8 GB minimum: baked lighting, conventional mesh LODs, no Nanite. Lumen off by default; at most an optional High/Ultra setting |
 | Destruction | Selected structures and props using Chaos; prepared geometry, constraints and collision |
 | Audio | Licensed or original ambience, effects and dialogue; subtitles and independent volume controls |
 | Controls | Keyboard and mouse initially; controller support after the core controls work |
 | Saving | Local settings and checkpoint saves |
 | Version control | Git for code; an appropriate large-file workflow for binary assets |
 
-Unreal’s current Mac documentation lists 16 GB as minimum memory and recommends 32 GB or more. Nanite support is listed for M2 and newer Macs, so it is not a dependency for the M1 target. Lumen software lighting is available on M1, but its performance in our jungle scene must be measured. Minimum editor specifications do not guarantee a smooth finished game.
+Unreal’s current Mac documentation lists 16 GB as minimum memory and recommends 32 GB or more. These are editor requirements for development, not requirements for players. Nanite support is listed for M2 and newer Macs, so it is not used. Lumen is expensive on the base M1 GPU, so the game is lit with baked lighting and a few dynamic lights (flares, muzzle flashes).
+
+The minimum player spec is a base M1 MacBook with 8 GB of unified memory. On Apple Silicon this memory is shared by macOS, the game and the GPU, so the packaged game must stay within roughly 4 to 5 GB in total (unverified estimate). The development Mac is an M1 Pro with about twice the GPU cores of a base M1, so it cannot stand in for the minimum spec. Test on a base M1 8 GB machine, borrowed or second-hand, before each milestone.
 
 ### Performance and graphics settings
 
-Initial benchmark goal: a small scene at approximately 1080p and 30 fps on the existing M1. This is an unverified target, not a guaranteed result. Profile packaged builds, including the most demanding combat and destruction moments.
+Initial benchmark goal: a small scene at approximately 1080p output and 30 fps on a base M1 with 8 GB, on the Low preset, with render scale or upscaling as needed. This is an unverified target, not a guaranteed result. Profile packaged builds, including the most demanding combat and destruction moments.
 
 | Preset | Proposed visual adjustments |
 |---|---|
-| Low | Reduced decorative foliage, shadow quality, effects and texture memory demand |
-| Medium | Balanced scenery, lighting and effects; tune early on the M1 |
+| Low | Minimum spec (base M1, 8 GB). Reduced decorative foliage, shadow quality, effects and texture memory demand |
+| Medium | Balanced scenery, lighting and effects; tune on the development M1 Pro |
 | High | Denser decorative scenery, improved lighting and higher texture/shadow quality |
 | Ultra | Highest supported visual settings, validated on stronger hardware |
 
@@ -166,7 +168,7 @@ Build a compact 10–15-minute version of Until Dawn:
 4. Two nearby comrades with limited scripted behaviour.
 5. A short preparation phase, one controlled attack and a relief ending.
 6. Basic sound, subtitles, checkpoint and Low/Medium settings.
-7. A packaged Mac build profiled on the M1, followed by a Windows compatibility check when hardware is available.
+7. A packaged Mac build profiled on a base M1 with 8 GB, followed by a Windows compatibility check when hardware is available.
 
 Defer the full village, complete recruitment sequence, long campaign, advanced squad AI, large-scale destruction and Ultra/4K validation until this milestone works. The prototype proves atmosphere and gameplay before production assets are purchased or generated in quantity.
 
@@ -174,7 +176,8 @@ Defer the full village, complete recruitment sequence, long campaign, advanced s
 
 - Confirm first-person gameplay versus third-person or a hybrid.
 - Select the fictional unit affiliation and campaign chronology from historical research.
-- Confirm the Mac’s exact model, macOS version and available storage before installation.
+- Find a base M1 8 GB Mac for minimum-spec testing.
+- Free up disk space before installation: about 151 GB was available on 11 October 2026.
 - Choose engine version and verify Tripo plugin compatibility; offline asset import remains a fallback.
 - Set a Tripo spending limit, with zero additional spending as the default prototype approach.
 

@@ -6,7 +6,7 @@ Companion to [story-and-technical-spec.md](story-and-technical-spec.md). All num
 
 ## Goal of the prototype
 
-Prove that one night of holding a small position feels tense, readable and personal, on an M1 MacBook. If this mission is not good at 10 to 15 minutes, a longer campaign will not fix it.
+Prove that one night of holding a small position feels tense, readable and personal, on a base M1 MacBook with 8 GB. If this mission is not good at 10 to 15 minutes, a longer campaign will not fix it.
 
 ## Design pillars
 
@@ -168,7 +168,7 @@ The attempt fails if Bir is hit while badly wounded or if a post is overrun. The
 
 - Small groups of 2 to 4 that move between cover points on a lane.
 - They fire, go to ground when fired on and advance when fire stops. That is enough to make suppression matter.
-- At most 8 active enemies at one time. This is both a design choice and a performance limit for the M1.
+- At most 8 active enemies at one time. This is both a design choice and a performance limit for the base M1.
 - Enemy soldiers are shown as soldiers, without caricature in faces, voices or behaviour. Their equipment and language need period research.
 - No enemy grenades in the milestone. This keeps the encounter clearly separate from the details of Lachhiman Gurung's real action.
 
@@ -217,7 +217,7 @@ Dialogue among the Gurkhas is in Nepali with English subtitles. A Nepali speaker
 
 ## Milestone performance budget
 
-These are planning limits for an M1 MacBook, to be checked in a packaged build.
+These are planning limits for a base M1 MacBook with 8 GB, to be checked in a packaged build.
 
 | Item | Limit |
 |---|---|
@@ -237,7 +237,7 @@ After 5 or more people outside the project have played it, check:
 - Did they run low on ammunition at least once?
 - Did they mention Kesar or Dhan by name afterwards?
 - Did the dawn scene land as a relief and not a letdown?
-- Did it hold 30 fps on the M1 during the hut collapse?
+- Did it hold 30 fps on a base M1 with 8 GB during the hut collapse?
 
 ## Open questions
 
