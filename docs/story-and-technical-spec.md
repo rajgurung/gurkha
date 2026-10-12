@@ -63,7 +63,7 @@ An optional historical epilogue acknowledges the real Gurkha soldiers and explai
 
 ## Immersion and presentation
 
-First-person is the recommended gameplay perspective, pending the user’s final choice. Occasional third-person scenes can establish departure, conversation and return. The previous concept images illustrated atmosphere in third-person; they do not lock the camera choice.
+Gameplay is in third person, with the camera behind Bir's shoulder. Holding aim switches to first person through the rifle sights. See [decision 0002](decisions/0002-camera-third-person-first-person-aim.md).
 
 Use natural Nepali dialogue among Gurkhas, with subtitles and researched English commands where appropriate. Prioritise footsteps, breathing, rain, jungle ambience and recognisable comrades’ voices. Keep the HUD restrained, with optional objective guidance and accessibility settings.
 
@@ -104,7 +104,7 @@ Carry into the game: selected breakable huts, fences and props, believable mater
 - Maintain natural proportions and believable equipment weight. Avoid oversized weapons, pristine uniforms and superhero posing.
 - Give the kukri its distinctive forward curve and matching sheath. Do not accept a straight dagger or machete as a substitute.
 - Match assets across sources through scale, material roughness, wear and colour grading. Tripo output needs review and refinement to fit this direction.
-- Preserve the scenery, materials and atmosphere in first-person gameplay if that perspective is selected. The concept board's third-person framing remains useful for cinematics and character inspection.
+- Gameplay uses third-person framing close to Scene 2 ([decision 0002](decisions/0002-camera-third-person-first-person-aim.md)). Bir, his uniform, webbing, helmet and kukri scabbard are on screen most of the time, so the player model must meet the same standard as the scenery.
 - Use the captions as descriptions of the concepts, not as a requirement to place large labels over gameplay. Keep in-game interfaces restrained.
 
 The board is the approved artistic direction, not an actual screenshot or verified performance target. The high-end version should pursue its visual richness; the M1 version should preserve its composition, atmosphere and material consistency within a measured performance budget.
@@ -163,7 +163,7 @@ The AI assistant can help prepare C++ code, Python editor scripts, data tables, 
 Build a compact 10–15-minute version of Until Dawn:
 
 1. One jungle approach, a defensive position and one small destructible structure.
-2. First-person movement and interaction; placeholder character assets.
+2. Third-person movement and interaction, first-person aim ([decision 0002](decisions/0002-camera-third-person-first-person-aim.md)); placeholder character assets.
 3. One rifle with aiming, firing and reloading.
 4. Two nearby comrades with limited scripted behaviour.
 5. A short preparation phase, one controlled attack and a relief ending.
@@ -174,7 +174,6 @@ Defer the full village, complete recruitment sequence, long campaign, advanced s
 
 ## Decisions still open
 
-- Confirm first-person gameplay versus third-person or a hybrid.
 - Select the fictional unit affiliation and campaign chronology from historical research.
 - Find a base M1 8 GB Mac for minimum-spec testing.
 - Free up disk space before installation: about 151 GB was available on 11 October 2026.

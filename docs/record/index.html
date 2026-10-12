@@ -1,0 +1,336 @@
+<title>Gurkha Production Record</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Public+Sans:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a field war diary. Status strip, then decision register, then the dated diary (Form C.2118 columns), then ledgers. */
+:root{
+  --bg:#eef0e8; --paper:#f8f9f4; --fg:#1f241c; --muted:#5d6656; --line:#cfd4c4;
+  --olive:#4b5a32; --brass:#9a6b1f; --brass-soft:#f1e4c8;
+  --ok:#2f6b3a; --ok-soft:#dcebd9; --warn:#8a5a00; --warn-soft:#f6e6c3; --bad:#9b2c2c; --bad-soft:#f4dada; --info:#2f5470; --info-soft:#dbe6ee;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#151912; --paper:#1d2219; --fg:#e4e8dc; --muted:#9aa58f; --line:#333b2c;
+  --olive:#a9bb84; --brass:#d9a54e; --brass-soft:#3a2f1a;
+  --ok:#8fcf98; --ok-soft:#1f3322; --warn:#e7b85c; --warn-soft:#3a2e14; --bad:#ef9a9a; --bad-soft:#3b1f1f; --info:#9cc2de; --info-soft:#1c2c38;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#151912; --paper:#1d2219; --fg:#e4e8dc; --muted:#9aa58f; --line:#333b2c;
+  --olive:#a9bb84; --brass:#d9a54e; --brass-soft:#3a2f1a;
+  --ok:#8fcf98; --ok-soft:#1f3322; --warn:#e7b85c; --warn-soft:#3a2e14; --bad:#ef9a9a; --bad-soft:#3b1f1f; --info:#9cc2de; --info-soft:#1c2c38;
+  color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body);padding-inline:16px;padding-block:24px 64px}
+.wrap{max-width:1040px;margin:0 auto;display:grid;gap:40px}
+a{color:var(--info)}
+a:focus-visible,summary:focus-visible,button:focus-visible{outline:2px solid var(--brass);outline-offset:2px}
+h1,h2{font-family:var(--display);text-transform:uppercase;letter-spacing:.02em;line-height:1;margin:0;text-wrap:balance}
+h1{font-size:clamp(34px,6vw,56px);font-weight:800}
+h2{font-size:26px;font-weight:800;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+h2 small{font:500 12px var(--mono);letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
+h3{font-size:16px;margin:0}
+p{margin:0}
+.eyebrow{font:500 12px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--brass)}
+.mono{font-family:var(--mono);font-size:13px}
+.muted{color:var(--muted)}
+section{display:grid;gap:16px;min-width:0}
+
+/* header */
+header{display:grid;gap:12px;border-bottom:3px double var(--olive);padding-bottom:20px}
+.sub{color:var(--muted);max-width:65ch}
+.meta{display:flex;flex-wrap:wrap;gap:8px 20px;font:13px var(--mono);color:var(--muted)}
+.meta b{color:var(--fg);font-weight:500}
+
+/* status strip */
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.cell{background:var(--paper);border:1px solid var(--line);padding:14px 16px;display:grid;gap:6px;align-content:start;min-width:0}
+.cell.attn{border-color:var(--brass);background:var(--brass-soft)}
+.cell .k{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.cell .v{font-family:var(--display);font-weight:800;font-size:22px;text-transform:uppercase;line-height:1.05}
+
+/* phases */
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0;border:1px solid var(--line);background:var(--paper)}
+.phase{padding:14px 16px;border-right:1px solid var(--line);display:grid;gap:6px;align-content:start;min-width:0}
+.phase:last-child{border-right:0}
+.phase .n{font:500 12px var(--mono);color:var(--muted)}
+.phase.now{background:var(--brass-soft)}
+.phase .d{font:12px var(--mono);color:var(--muted)}
+
+/* pills */
+.pill{display:inline-block;font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border:1px solid currentColor;white-space:nowrap}
+.p-acc{color:var(--ok);background:var(--ok-soft)}
+.p-pro{color:var(--warn);background:var(--warn-soft)}
+.p-ver{color:var(--ok);background:var(--ok-soft)}
+.p-unv{color:var(--bad);background:var(--bad-soft)}
+.p-one{color:var(--warn);background:var(--warn-soft)}
+.p-ph{color:var(--olive);background:transparent}
+
+/* decisions */
+.dec{background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--ok)}
+.dec.proposed{border-left-color:var(--warn)}
+.dec summary{cursor:pointer;list-style:none;padding:14px 16px;display:grid;grid-template-columns:auto 1fr auto;gap:4px 14px;align-items:baseline}
+.dec summary::-webkit-details-marker{display:none}
+.dec .num{font-family:var(--display);font-weight:800;font-size:28px;color:var(--muted)}
+.dec .ttl{font-weight:600;font-size:17px}
+.dec .one{grid-column:2/4;color:var(--muted)}
+.dec .body{padding:0 16px 18px;display:grid;gap:16px;border-top:1px solid var(--line);padding-top:16px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px 28px}
+.cols > div{min-width:0;display:grid;gap:6px;align-content:start}
+ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.lbl{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--brass)}
+
+/* diary table */
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.filters button{font:500 12px var(--mono);padding:6px 10px;border:1px solid var(--line);background:var(--paper);color:var(--fg);cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--olive);border-color:var(--olive);color:var(--paper)}
+.tablebox{overflow-x:auto;border:1px solid var(--line);background:var(--paper)}
+table{border-collapse:collapse;width:100%;min-width:720px}
+th,td{text-align:left;vertical-align:top;padding:10px 12px;border-bottom:1px solid var(--line)}
+th{font:500 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--bg);position:sticky;top:0}
+td.date{font:13px var(--mono);white-space:nowrap;font-variant-numeric:tabular-nums}
+td.ref{font:12px var(--mono);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.form{font:11px var(--mono);color:var(--muted)}
+
+/* ledger */
+.ledger{display:grid;gap:0;border:1px solid var(--line);background:var(--paper)}
+.row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:10px 14px;border-bottom:1px solid var(--line);align-items:baseline}
+.row:last-child{border-bottom:0}
+.row .src{grid-column:1/3;font:12px var(--mono);color:var(--muted)}
+
+/* team */
+.team{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.agent{background:var(--paper);border:1px solid var(--line);padding:12px 14px;display:grid;gap:4px;min-width:0}
+.agent .who{font:500 13px var(--mono)}
+footer{font:12px var(--mono);color:var(--muted);border-top:1px solid var(--line);padding-top:16px;display:grid;gap:4px}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
+</style>
+
+<div class="wrap">
+
+<header>
+  <span class="eyebrow">Production record · Kept like a war diary</span>
+  <h1>Gurkha: The Long Way Home</h1>
+  <p class="sub">Every decision, phase and result for the game, dated, in one place. First milestone: <b>Until Dawn</b>, a 10 to 15 minute night defence in Unreal Engine 5.8, playable on a base M1 with 8 GB.</p>
+  <div class="meta">
+    <span>Last entry <b>12 Oct 2026 18:35</b></span>
+    <span>Owner <b>Raj</b></span>
+    <span>Repo <b><a href="https://github.com/rajgurung/gurkha">rajgurung/gurkha</a></b></span>
+    <span>Source of truth <b>docs/ in the repo</b></span>
+  </div>
+</header>
+
+<section aria-labelledby="now">
+  <h2 id="now">Where things stand <small>12 Oct 2026</small></h2>
+  <div class="strip">
+    <div class="cell"><span class="k">In progress</span><span class="v">Building 0002</span><span class="muted">Camera prototype on the Mannequin. docs-editor is recording 0002 and updating both specs.</span></div>
+    <div class="cell attn"><span class="k">Waiting on Raj</span><span class="v">Try mouse look</span><span class="muted">Built at 0.4. Not committed until it feels right.</span></div>
+    <div class="cell"><span class="k">Current phase</span><span class="v">P3 Prototype</span><span class="muted">Unreal project exists. Camera build starts after 0002.</span></div>
+    <div class="cell"><span class="k">Decisions</span><span class="v">2 accepted</span><span class="muted">Records live in docs/decisions/.</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="phases">
+  <h2 id="phases">Phases <small>Every entry below is tagged with one</small></h2>
+  <div class="phases">
+    <div class="phase"><span class="n">P0</span><h3>Concept</h3><p class="muted">Story, technical spec, concept board, Until Dawn gameplay spec.</p><span class="d">11 Oct</span></div>
+    <div class="phase"><span class="n">P1</span><h3>Foundations</h3><p class="muted">M1 8 GB target, repo, Unreal, Blender, Xcode, git LFS.</p><span class="d">11 to 12 Oct</span></div>
+    <div class="phase"><span class="n">P2</span><h3>Team and process</h3><p class="muted">8 agents, decision loop, StaffOS, live board, decision 0001.</p><span class="d">12 Oct</span></div>
+    <div class="phase now"><span class="n">P3 · Now</span><h3>Until Dawn prototype</h3><p class="muted">Unreal project, render settings, controls, camera, first playable.</p><span class="d">12 Oct onward</span></div>
+  </div>
+</section>
+
+<section aria-labelledby="decisions">
+  <h2 id="decisions">Decision register <small>Propose · Review · Resolve · Approve · Record · Build · Review</small></h2>
+
+  <details class="dec" open>
+    <summary>
+      <span class="num">0002</span><span class="ttl">Third-person camera, first person when aiming</span><span class="pill p-acc">Accepted · Building</span>
+      <span class="one">Play behind Bir's right shoulder. Hold aim to blend into the rifle sights. Main cost: full-body animations that look right from behind.</span>
+    </summary>
+    <div class="body">
+      <div class="cols">
+        <div><span class="lbl">Phase · Dates</span><p>P3 · Proposed and accepted 12 Oct 2026 · Approved by Raj</p></div>
+        <div><span class="lbl">Who took part</span><p>Proposal: game-designer. Reviews: unreal-engineer, art-director, technical-artist, historian. All approve with changes.</p></div>
+      </div>
+      <div class="cols">
+        <div><span class="lbl">The rules</span><ul>
+          <li>Hold aim, 0.20 s blend in, 0.15 s out. Toggle aim for accessibility.</li>
+          <li>Charger reload drops aim. Bolt works in the sights.</li>
+          <li>First aid, ammo, kukri and talking are all third person.</li>
+          <li>No crosshair by default. Optional aim dot in both views.</li>
+          <li>Shots trace from the muzzle, never the camera.</li>
+          <li>Crouched camera clamped to parapet top + 0.10 m. Tested.</li>
+        </ul></div>
+        <div><span class="lbl">Changes from review</span><ul>
+          <li>Separate arms mesh shown only while aiming.</li>
+          <li>One camera, blended in the camera manager.</li>
+          <li>FOV 72° / 65°. Exposure clamped. Bir under 25% of frame.</li>
+          <li>Shared Mannequin skeleton. Carry at dawn becomes a fade.</li>
+          <li>Bir about 35k triangles. Blob shadow on Low.</li>
+          <li>1937 webbing, kukri at the back, no insignia, headgear swappable.</li>
+        </ul></div>
+      </div>
+      <div class="cols">
+        <div><span class="lbl">Resolved disagreements</span><ul>
+          <li>FOV 80° vs 70 to 75°: set 72°.</li>
+          <li>Arms mesh vs full body: arms mesh, the engineer's call.</li>
+          <li>30k vs 35k triangles: 35k including kit.</li>
+        </ul></div>
+        <div><span class="lbl">Revisit when</span><ul>
+          <li>Testers spot enemies from third person they could not see aiming.</li>
+          <li>The view switch causes discomfort.</li>
+          <li>Animation blocks the first playable more than 2 weeks: fall back to first person.</li>
+        </ul></div>
+      </div>
+      <p class="mono"><a href="https://github.com/rajgurung/gurkha/tree/main/docs/decisions">docs/decisions/0002-camera-third-person-first-person-aim.md</a> · not yet committed</p>
+    </div>
+  </details>
+
+  <details class="dec">
+    <summary>
+      <span class="num">0001</span><span class="ttl">Gameplay logic in C++, tuning as data</span><span class="pill p-acc">Accepted</span>
+      <span class="one">Rules in C++. Everything a designer tunes is data, edited without a compile. Blueprints only wire up meshes, sounds and animation.</span>
+    </summary>
+    <div class="body">
+      <div class="cols">
+        <div><span class="lbl">Phase · Dates</span><p>P2 · Proposed and accepted 12 Oct 2026 · Approved by Raj</p></div>
+        <div><span class="lbl">Who took part</span><p>Proposal: unreal-engineer. Reviews: game-designer, perf-qa. Recorded by docs-editor.</p></div>
+      </div>
+      <div class="cols">
+        <div><span class="lbl">Why</span><ul>
+          <li>Agents cannot read or review Blueprint graphs. C++ is diffable text.</li>
+          <li>Raj still tunes ammo, timers, pressure and difficulty without compiling.</li>
+          <li>Tests first, cheats and a debug overlay from day one.</li>
+        </ul></div>
+        <div><span class="lbl">Tradeoffs accepted</span><ul>
+          <li>No Live Coding on Mac. Logic changes need a rebuild and editor restart.</li>
+          <li>Raj cannot sketch mechanics in Blueprint.</li>
+          <li>Levels, destruction and animation are checked by tests only.</li>
+        </ul></div>
+      </div>
+      <div class="cols">
+        <div><span class="lbl">Notes added since</span><ul>
+          <li>12 Oct: project lives at game/UntilDawn/, module UntilDawn.</li>
+          <li>12 Oct: Xcode 26.1.1 builds 5.8.3 C++. First build 381 s.</li>
+        </ul></div>
+        <div><span class="lbl">Revisit when</span><ul>
+          <li>A small code change takes over about 2 minutes, edit to editor.</li>
+          <li>Raj often needs to prototype mechanics himself.</li>
+        </ul></div>
+      </div>
+      <p class="mono"><a href="https://github.com/rajgurung/gurkha/blob/main/docs/decisions/0001-gameplay-code-in-cpp.md">docs/decisions/0001-gameplay-code-in-cpp.md</a> · <a href="https://github.com/rajgurung/gurkha/commit/af723ce">af723ce</a></p>
+    </div>
+  </details>
+</section>
+
+<section aria-labelledby="diary">
+  <h2 id="diary">War diary <small>Date · Hour · Phase · Summary of events · References</small></h2>
+  <div class="filters" role="group" aria-label="Filter by phase">
+    <button type="button" data-f="all" aria-pressed="true">All</button>
+    <button type="button" data-f="P0" aria-pressed="false">P0 Concept</button>
+    <button type="button" data-f="P1" aria-pressed="false">P1 Foundations</button>
+    <button type="button" data-f="P2" aria-pressed="false">P2 Team</button>
+    <button type="button" data-f="P3" aria-pressed="false">P3 Prototype</button>
+  </div>
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>Date</th><th>Hour</th><th>Phase</th><th>Summary of events</th><th>References</th></tr></thead>
+      <tbody id="diary-rows"></tbody>
+    </table>
+  </div>
+  <p class="form">Columns follow the British Army war diary, Army Form C.2118. Newest first.</p>
+</section>
+
+<section aria-labelledby="facts">
+  <h2 id="facts">Verified and unverified <small>What we know, and what we assume</small></h2>
+  <div class="ledger" id="facts-rows"></div>
+</section>
+
+<section aria-labelledby="team">
+  <h2 id="team">The team <small>Claude Code agents in .claude/agents/</small></h2>
+  <div class="team" id="team-rows"></div>
+  <p class="muted">The main session acts as producer: it carries plans between agents and merges reviews. Raj approves every plan. Agents never commit.</p>
+</section>
+
+<section aria-labelledby="open">
+  <h2 id="open">Open questions</h2>
+  <div class="ledger">
+    <div class="row"><span>Find a base M1 with 8 GB to test on. The dev Mac is an M1 Pro with 16 GB and cannot stand in.</span><span class="pill p-pro">Open</span></div>
+    <div class="row"><span>Does a base M1 run Metal SM6? The project targets SM6 only on Mac.</span><span class="pill p-pro">perf-qa</span></div>
+    <div class="row"><span>Headgear on night defence: steel helmet or slouch hat.</span><span class="pill p-pro">historian</span></div>
+    <div class="row"><span>Which rifle: No. 1 Mk III or No. 4.</span><span class="pill p-pro">historian</span></div>
+    <div class="row"><span>Where WW2 bolt-action animations come from, and their licence.</span><span class="pill p-pro">technical-artist</span></div>
+    <div class="row"><span>Set up beads for task tracking, or use something else.</span><span class="pill p-pro">Raj</span></div>
+    <div class="row"><span>Hold Xcode below 26.4. Epic lists 26.4 as incompatible with 5.8.</span><span class="pill p-unv">Rule</span></div>
+  </div>
+</section>
+
+<footer>
+  <span>Updated by the producer at each stage of the decision loop. The repo stays the source of truth; this page collects it.</span>
+  <span>Labels: Verified means measured or sourced. Single source means one source only. Unverified means nobody has checked.</span>
+</footer>
+
+</div>
+
+<script>
+const diary = [
+  ["2026-10-12","18:35","P3","Raj approved 0002. docs-editor recording it and updating both specs. unreal-engineer building the first camera prototype on the Mannequin.","0002"],
+  ["2026-10-12","18:20","P3","0002 reviews merged: 4 of 4 approve with changes. FOV set at 72°, arms mesh chosen, 35k triangle budget. Sent to Raj for approval.","0002"],
+  ["2026-10-12","18:05","P3","Mouse look sensitivity made tuning data: mouse 0.4, gamepad 1.0, in DefaultGame.ini. Build 107 s. Awaiting Raj's feel test.","uncommitted"],
+  ["2026-10-12","17:58","P3","Raj played Lvl_FirstPerson. Movement works, mouse too sensitive. Asked for third person with first person when aiming. 0002 opened.","0002"],
+  ["2026-10-12","17:55","P3","Editor hit low memory during shader compile: editor 4.7 GB plus Xcode indexing and other apps, 11 GB swap. Passed once shaders finished.","measured"],
+  ["2026-10-12","17:53","P3","Render settings set to spec: static lighting on; Lumen, virtual shadows, ray tracing, Substrate and distance fields off. Horror variant removed (105 files). Rebuild 222 s, 0 warnings.","a4df998"],
+  ["2026-10-12","17:36","P3","UntilDawn C++ project created from the First Person template at game/UntilDawn. First build 381 s.","a4df998"],
+  ["2026-10-12","17:25","P1","Project creation failed: Xcode 26 ships without the Metal Toolchain. Installed it (705 MB) with xcodebuild -downloadComponent MetalToolchain.","fix"],
+  ["2026-10-12","16:21","P2","Decision 0001 accepted: gameplay logic in C++, tuning as data. First full run of the decision loop, about 3 minutes of agent time.","af723ce"],
+  ["2026-10-12","15:46","P2","8 agents created, how-we-work process written, live agent board built. StaffOS project Gurkha records each session.","9c345e3"],
+  ["2026-10-12","13:32","P1","Git LFS and .gitignore rules for Unreal, Blender and media. Commits authored by Raj only.","261f001"],
+  ["2026-10-12","12:00","P1","Unreal Engine 5.8.3 and Blender 5.2.2 LTS installed and verified on the M1 Pro.","tooling"],
+  ["2026-10-11","16:46","P1","Xcode rules pinned: 26.1.1 recommended, 26.4 incompatible. Spec targets base M1 with 8 GB: baked lighting, no Nanite, Lumen off.","517d004 · 99aa352"],
+  ["2026-10-11","15:51","P0","Story and technical spec, Until Dawn gameplay spec and concept board committed. Public repo created.","a7b6a06"],
+];
+const facts = [
+  ["Xcode 26.1.1 builds a 5.8.3 C++ project","ver","First editor build succeeded, 12 Oct"],
+  ["Build times on the M1 Pro: 381 s first, 222 s full rebuild, 107 s small change","ver","UnrealBuildTool logs, 12 Oct"],
+  ["Editor uses about 4.7 GB; 16 GB is tight during shader compiles","ver","footprint, 12 Oct"],
+  ["Live Coding is Windows-only in this engine","ver","TargetRules.cs line 1589"],
+  ["Kukri carried on the belt at the back; 1937 pattern webbing in Burma 1944","ver","AWM C277417, AWM C395171"],
+  ["Lee-Enfield bolt can be worked without leaving the sights","one","Two secondary sources, one forum dissent"],
+  ["Game fits in about 4 to 5 GB on a base M1 with 8 GB","unv","Estimate only. No test machine."],
+  ["Base M1 supports Metal SM6","unv","Not checked"],
+  ["Data table edits apply during Play in 5.8.3","unv","Not checked"],
+  ["Third-person camera, triangle and texture budgets","unv","Proposed in 0002, not profiled"],
+];
+const team = [
+  ["game-designer","Mechanics, tuning, mission specs","Proposed 0002"],
+  ["historian","Gurkha history, kit, Nepali culture. Can block.","Reviewed 0002"],
+  ["docs-editor","Doc structure and decision records","Recording 0002"],
+  ["unreal-engineer","C++, levels, builds","Building 0002 camera prototype"],
+  ["technical-artist","Tripo, Blender, LODs, import. No paid Tripo without Raj.","Reviewed 0002"],
+  ["perf-qa","Profiling on base M1 8 GB, tests","Next: M1 SM6 check"],
+  ["art-director","Visual direction, asset specs","Reviewed 0002"],
+  ["narrative-designer","Story, dialogue, letters home","Starts with story work"],
+];
+const fmt = d => new Date(d+"T00:00:00").toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"});
+const esc = s => s.replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+const refCell = r => r.split(" · ").map(x=>/^[0-9a-f]{7}$/.test(x)?`<a href="https://github.com/rajgurung/gurkha/commit/${x}">${x}</a>`:esc(x)).join(" · ");
+const tbody = document.getElementById("diary-rows");
+function renderDiary(f){
+  tbody.innerHTML = diary.filter(r=>f==="all"||r[2]===f).map(r=>
+    `<tr><td class="date">${fmt(r[0])}</td><td class="date">${r[1]}</td><td><span class="pill p-ph">${r[2]}</span></td><td>${esc(r[3])}</td><td class="ref">${refCell(r[4])}</td></tr>`).join("");
+}
+renderDiary("all");
+document.querySelectorAll(".filters button").forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll(".filters button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));
+  renderDiary(b.dataset.f);
+}));
+const label = {ver:["Verified","p-ver"],one:["Single source","p-one"],unv:["Unverified","p-unv"]};
+document.getElementById("facts-rows").innerHTML = facts.map(([t,k,s])=>
+  `<div class="row"><span>${esc(t)}</span><span class="pill ${label[k][1]}">${label[k][0]}</span><span class="src">${esc(s)}</span></div>`).join("");
+document.getElementById("team-rows").innerHTML = team.map(([n,o,s])=>
+  `<div class="agent"><span class="who">${n}</span><span class="muted">${esc(o)}</span><span>${esc(s)}</span></div>`).join("");
+</script>

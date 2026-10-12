@@ -1,6 +1,6 @@
 # Until Dawn: Gameplay Specification
 
-First playable milestone for GURKHA: The Long Way Home. Draft, 11 October 2026.
+First playable milestone for GURKHA: The Long Way Home. Draft, 11 October 2026. Camera updated 12 October 2026.
 
 Companion to [story-and-technical-spec.md](story-and-technical-spec.md). All numbers here are starting values for tuning, not tested results.
 
@@ -67,7 +67,7 @@ The light fades on a visible timer: the sun goes down behind the far ridge. Ther
 | Carry extra ammunition to Right | Dhan calls for ammunition once less in Phase 5. |
 | Walk the telephone line and learn the route | In Phase 4, a marked shortcut to the cache appears. |
 
-This is where the kukri appears in the milestone. It is a working tool for cutting brush, as in the village chapter. It is not a combat weapon in this prototype.
+This is where the kukri appears in the milestone. Brush clearing is shown in third person. It is a working tool for cutting brush, as in the village chapter. It is not a combat weapon in this prototype.
 
 No task is wrong. The aim is to make the player feel that their dusk choices mattered when it gets dark.
 
@@ -98,7 +98,7 @@ The enemy attacks whichever post was under most pressure at the end of Phase 5. 
 
 ### 8. Dawn and relief
 
-Shouts in Nepali from down the ridge. Relief troops arrive. The player walks the position in grey light: the collapsed hut, the spent cases, the damage to the parapet. Bir helps carry Kesar to the stretcher. Dhan sits down on the edge of the trench.
+Shouts in Nepali from down the ridge. Relief troops arrive. The player walks the position in grey light: the collapsed hut, the spent cases, the damage to the parapet. Bir helps carry Kesar to the stretcher. In the milestone this is a fade or a short cutscene ([decision 0002](decisions/0002-camera-third-person-first-person-aim.md)). Dhan sits down on the edge of the trench.
 
 There is no score screen. An end card shows the date and the line "Inspired by the soldiers of the Gurkha regiments", then returns to the menu.
 
@@ -109,6 +109,8 @@ There is no score screen. An end card shows the date and the line "Inspired by t
 - Walk, crouch and short sprint. No prone in the milestone.
 - Mud and trench water slow movement slightly. Sprint drains faster in the trench.
 - The parapet at each post has a fixed firing position. Pressing interact snaps into it, which steadies aim.
+- **Camera.** Third person by default, behind Bir's shoulder. Holding aim switches to first person through the sights. One key swaps the shoulder. Rules and values are in [decision 0002](decisions/0002-camera-third-person-first-person-aim.md).
+- **No peeking.** Crouched at a parapet, the camera stays no more than a small clearance above the parapet top. To see the lane, Bir must stand or aim.
 
 ### Rifle
 
@@ -117,7 +119,9 @@ The milestone has one bolt-action rifle with a 10-round magazine. The exact mode
 - Work the bolt after every shot. Firing again too quickly does nothing.
 - Reload with 5-round chargers. A partial reload is allowed: the player can push in one charger when the magazine is half empty.
 - Aiming down the sights is steady at a parapet and sways more when standing in the open.
-- No crosshair by default. An optional dot is in accessibility settings.
+- Hip fire is allowed in third person, with wide spread. It wastes rounds.
+- The bolt works in either view. Reloading drops aim back to third person.
+- No crosshair in either view by default. An optional dot is in accessibility settings.
 
 ### Ammunition
 
@@ -127,7 +131,7 @@ The milestone has one bolt-action rifle with a 10-round magazine. The exact mode
 | Cache | 20 chargers (100 rounds), shared by the whole section |
 | Dhan's calls for ammo in Phase 5 | 2 (1 if Right was resupplied during prep) |
 
-Giving a comrade ammunition is a held interaction of about 1.5 seconds, beside them. The aim is that a careful player finishes Phase 7 with fewer than 10 rounds left. A wasteful player will run dry and have to go back to the cache under fire.
+Giving a comrade ammunition is a held interaction of about 1.5 seconds, beside them, in third person. The aim is that a careful player finishes Phase 7 with fewer than 10 rounds left. A wasteful player will run dry and have to go back to the cache under fire.
 
 ### Player wounds
 
@@ -139,11 +143,11 @@ No health regeneration. Bir has three states:
 | Wounded | Slower bolt and reload, more aim sway, muffled sound for a few seconds after each hit |
 | Badly wounded | Slow movement, heavy sway. Another hit ends the attempt. |
 
-The player can dress their own wound during a quiet moment (hold for 4 seconds, cannot fire). It brings them back one state, with a limit of 2 dressings. Wounds from the night stay visible in the dawn scene.
+The player can dress their own wound during a quiet moment (hold for 4 seconds, cannot fire, third person). It brings them back one state, with a limit of 2 dressings. Wounds from the night stay visible in the dawn scene.
 
 ### First aid on comrades
 
-Dressing Kesar's wound in Phase 6 is a short hands-on sequence. Kneel, open the dressing, press, tie. It uses three button presses in a slow rhythm, not a quick-time test. It should feel careful, not like a minigame.
+Dressing Kesar's wound in Phase 6 is a short hands-on sequence. Kneel, open the dressing, press, tie. It uses three button presses in a slow rhythm, not a quick-time test. It should feel careful, not like a minigame. The third-person camera moves in closer and lower for the three steps.
 
 ### Comrades
 
@@ -202,7 +206,9 @@ Accessibility settings for the milestone:
 
 - Subtitles with speaker names and size options.
 - Separate volume sliders for dialogue, effects and ambience.
-- Optional aim dot and optional enemy outline in flare light.
+- Optional aim dot, shown in both views, and optional enemy outline in flare light.
+- Toggle aim instead of hold. Hold is the default.
+- Look sensitivity, set separately for hip and aim.
 - Two difficulty levels. Story gives more ammunition, more dressings and a slower pressure rise. Standard uses the values above.
 - Rebindable keys.
 
@@ -226,6 +232,7 @@ These are planning limits for a base M1 MacBook with 8 GB, to be checked in a pa
 | Chaos destruction events | 1 |
 | Dynamic lights at once | Moon, plus up to 2 flares and short muzzle flashes |
 | Approach area | About 60 by 80 metres of playable jungle; the rest is a backdrop |
+| Player character | Full body on screen most of the time, with shadow on Medium and above. Budget in [decision 0002](decisions/0002-camera-third-person-first-person-aim.md) |
 
 Profile the main attack at the moment the hut collapses. That is the heaviest point of the mission.
 
@@ -245,4 +252,3 @@ After 5 or more people outside the project have played it, check:
 - How enemy soldiers are depicted, and which language and equipment they use.
 - Whether comrades can die in the full campaign.
 - Who writes and reviews the Nepali dialogue.
-- First-person is assumed here. A third-person version would need the same layout but different animation work.

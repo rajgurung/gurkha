@@ -79,6 +79,10 @@ The producer keeps `.claude/loop.json` up to date at each stage: decision, title
 
 The mod currently lives in this Claude Code session's mods folder, not in the repo.
 
+### Production record
+
+One page collects every decision, phase and dated event: the [production record](https://claude.ai/artifact/UjAuLyKMDjjxAKZmyGb4Bq) (private to Raj). Its source is `docs/record/index.html`. The producer adds a dated entry, tagged with its phase, at every stage of the loop and after every build or commit, then republishes it. The repo docs stay the source of truth.
+
 ### Small changes: the short path
 
 Use this for bug fixes, tuning values and wording. One implementer, one reviewer, and a doc check. No decision record unless the change turns out to be bigger than expected.
