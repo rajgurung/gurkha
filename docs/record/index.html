@@ -116,7 +116,7 @@ footer{font:12px var(--mono);color:var(--muted);border-top:1px solid var(--line)
   <h1>Gurkha: The Long Way Home</h1>
   <p class="sub">Every decision, phase and result for the game, dated, in one place. First milestone: <b>Until Dawn</b>, a 10 to 15 minute night defence in Unreal Engine 5.8, playable on a base M1 with 8 GB.</p>
   <div class="meta">
-    <span>Last entry <b>12 Oct 2026 18:35</b></span>
+    <span>Last entry <b>12 Oct 2026 18:55</b></span>
     <span>Owner <b>Raj</b></span>
     <span>Repo <b><a href="https://github.com/rajgurung/gurkha">rajgurung/gurkha</a></b></span>
     <span>Source of truth <b>docs/ in the repo</b></span>
@@ -126,8 +126,8 @@ footer{font:12px var(--mono);color:var(--muted);border-top:1px solid var(--line)
 <section aria-labelledby="now">
   <h2 id="now">Where things stand <small>12 Oct 2026</small></h2>
   <div class="strip">
-    <div class="cell"><span class="k">In progress</span><span class="v">Building 0002</span><span class="muted">Camera prototype on the Mannequin. docs-editor is recording 0002 and updating both specs.</span></div>
-    <div class="cell attn"><span class="k">Waiting on Raj</span><span class="v">Try mouse look</span><span class="muted">Built at 0.4. Not committed until it feels right.</span></div>
+    <div class="cell attn"><span class="k">Waiting on Raj</span><span class="v">Playtest 0002</span><span class="muted">Hold right mouse to aim. Third person confirmed by screenshot; aiming not yet tried.</span></div>
+    <div class="cell"><span class="k">Last commit</span><span class="v">212b7e5</span><span class="muted">0002 record, spec updates, camera prototype, this page.</span></div>
     <div class="cell"><span class="k">Current phase</span><span class="v">P3 Prototype</span><span class="muted">Unreal project exists. Camera build starts after 0002.</span></div>
     <div class="cell"><span class="k">Decisions</span><span class="v">2 accepted</span><span class="muted">Records live in docs/decisions/.</span></div>
   </div>
@@ -148,7 +148,7 @@ footer{font:12px var(--mono);color:var(--muted);border-top:1px solid var(--line)
 
   <details class="dec" open>
     <summary>
-      <span class="num">0002</span><span class="ttl">Third-person camera, first person when aiming</span><span class="pill p-acc">Accepted · Building</span>
+      <span class="num">0002</span><span class="ttl">Third-person camera, first person when aiming</span><span class="pill p-acc">Accepted · Stage 7 Review</span>
       <span class="one">Play behind Bir's right shoulder. Hold aim to blend into the rifle sights. Main cost: full-body animations that look right from behind.</span>
     </summary>
     <div class="body">
@@ -186,7 +186,7 @@ footer{font:12px var(--mono);color:var(--muted);border-top:1px solid var(--line)
           <li>Animation blocks the first playable more than 2 weeks: fall back to first person.</li>
         </ul></div>
       </div>
-      <p class="mono"><a href="https://github.com/rajgurung/gurkha/tree/main/docs/decisions">docs/decisions/0002-camera-third-person-first-person-aim.md</a> · not yet committed</p>
+      <p class="mono"><a href="https://github.com/rajgurung/gurkha/blob/main/docs/decisions/0002-camera-third-person-first-person-aim.md">docs/decisions/0002-camera-third-person-first-person-aim.md</a> · <a href="https://github.com/rajgurung/gurkha/commit/212b7e5">212b7e5</a></p>
     </div>
   </details>
 
@@ -278,9 +278,11 @@ footer{font:12px var(--mono);color:var(--muted);border-top:1px solid var(--line)
 
 <script>
 const diary = [
+  ["2026-10-12","18:55","P3","Camera prototype built (174 s): spring arm behind right shoulder, hold right mouse or left trigger to blend into the sights, FOV 72 to 65, aim look 0.6x. New IA_Aim input added headlessly. Third person confirmed by screenshot. Committed with the 0002 record and spec updates.","212b7e5"],
+  ["2026-10-12","18:45","P3","0002 recorded: Accepted, index updated, both specs now say third person with first-person aim. Carry at dawn becomes a fade.","212b7e5"],
   ["2026-10-12","18:35","P3","Raj approved 0002. docs-editor recording it and updating both specs. unreal-engineer building the first camera prototype on the Mannequin.","0002"],
   ["2026-10-12","18:20","P3","0002 reviews merged: 4 of 4 approve with changes. FOV set at 72°, arms mesh chosen, 35k triangle budget. Sent to Raj for approval.","0002"],
-  ["2026-10-12","18:05","P3","Mouse look sensitivity made tuning data: mouse 0.4, gamepad 1.0, in DefaultGame.ini. Build 107 s. Awaiting Raj's feel test.","uncommitted"],
+  ["2026-10-12","18:05","P3","Mouse look sensitivity made tuning data: mouse 0.4, gamepad 1.0, in DefaultGame.ini. Build 107 s. Awaiting Raj's feel test.","212b7e5"],
   ["2026-10-12","17:58","P3","Raj played Lvl_FirstPerson. Movement works, mouse too sensitive. Asked for third person with first person when aiming. 0002 opened.","0002"],
   ["2026-10-12","17:55","P3","Editor hit low memory during shader compile: editor 4.7 GB plus Xcode indexing and other apps, 11 GB swap. Passed once shaders finished.","measured"],
   ["2026-10-12","17:53","P3","Render settings set to spec: static lighting on; Lumen, virtual shadows, ray tracing, Substrate and distance fields off. Horror variant removed (105 files). Rebuild 222 s, 0 warnings.","a4df998"],
@@ -303,13 +305,15 @@ const facts = [
   ["Game fits in about 4 to 5 GB on a base M1 with 8 GB","unv","Estimate only. No test machine."],
   ["Base M1 supports Metal SM6","unv","Not checked"],
   ["Data table edits apply during Play in 5.8.3","unv","Not checked"],
+  ["Third-person camera works in play","ver","Screenshot from -game run, 12 Oct"],
+  ["Aim blend, arms swap and slower aim look work in play","unv","Built, not yet played"],
   ["Third-person camera, triangle and texture budgets","unv","Proposed in 0002, not profiled"],
 ];
 const team = [
   ["game-designer","Mechanics, tuning, mission specs","Proposed 0002"],
   ["historian","Gurkha history, kit, Nepali culture. Can block.","Reviewed 0002"],
-  ["docs-editor","Doc structure and decision records","Recording 0002"],
-  ["unreal-engineer","C++, levels, builds","Building 0002 camera prototype"],
+  ["docs-editor","Doc structure and decision records","Recorded 0002"],
+  ["unreal-engineer","C++, levels, builds","Built 0002 camera prototype"],
   ["technical-artist","Tripo, Blender, LODs, import. No paid Tripo without Raj.","Reviewed 0002"],
   ["perf-qa","Profiling on base M1 8 GB, tests","Next: M1 SM6 check"],
   ["art-director","Visual direction, asset specs","Reviewed 0002"],
