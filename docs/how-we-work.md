@@ -36,7 +36,7 @@ The global `staff-reviewer` agent reviews code and diffs. There is no product ma
 
 ### Rollout
 
-1. **Phase 1:** the four Phase 1 agents test the process on one real decision (see Open questions).
+1. **Phase 1:** the four Phase 1 agents test the process on one real decision: [0001](decisions/0001-gameplay-code-in-cpp.md).
 2. **Phase 2:** the technical artist and performance agents start once the Unreal project exists.
 3. **Phase 3:** the narrative designer and art director start when story and art work begins.
 
@@ -85,7 +85,7 @@ Use this for bug fixes, tuning values and wording. One implementer, one reviewer
 
 ## Decision records
 
-One file per decision, numbered in order: `docs/decisions/0001-gameplay-in-cpp.md`.
+One file per decision, numbered in order, for example `docs/decisions/0001-gameplay-code-in-cpp.md`. The [index](decisions/README.md) lists them all.
 
 ```
 # 0001: Title in plain words
@@ -123,7 +123,7 @@ README.md            Start here: what this is, status, where things live
 docs/
   how-we-work.md     This page
   status.md          Current milestone: done, doing, blocked (planned)
-  decisions/         Decision records (planned)
+  decisions/         Decision records, indexed in decisions/README.md
   design/            Story and gameplay specs (planned; specs sit in docs/ for now)
   art/               Art direction, asset list, concept images
   tech/              Engine setup, pipeline, performance budgets (planned)
@@ -167,12 +167,12 @@ The documentation editor checks these on every change.
 
 ## Known limits
 
-- **Blueprints are binary.** Agents cannot read or edit Blueprint graphs as text. This is the first decision to make (see Open questions).
+- **Blueprints are binary.** Agents cannot read or edit Blueprint graphs as text. [Decision 0001](decisions/0001-gameplay-code-in-cpp.md) keeps gameplay logic out of Blueprints for this reason.
 - **Live Unreal editor control** needs a community MCP server. Its quality for Unreal 5.8 is unverified.
 - **Agent reviews cost tokens.** Use the full loop only for big decisions.
 
 ## Open questions
 
-- **Decision 0001: gameplay logic in C++ or Blueprint?** The suggestion is C++ for logic, so agents can write and review it, with Blueprints only for tuning values. This will be the first test of the full loop.
+- **Decision 0001 is resolved.** Gameplay logic is C++ and tuning is data. See [0001](decisions/0001-gameplay-code-in-cpp.md).
 - **Set up beads in this repo** for task tracking, or use something else?
 - **Extract a reusable game-dev plugin** (agents, loop, board, guard hooks, docs scaffold) once the process has worked on a few Gurkha decisions and been tried on a second game.

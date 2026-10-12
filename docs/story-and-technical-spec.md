@@ -118,7 +118,7 @@ The board is the approved artistic direction, not an actual screenshot or verifi
 | Initial platform | macOS on Apple Silicon. Minimum player spec: base M1 with 8 GB unified memory. Minimum OS version set by the selected engine |
 | Subsequent platform | Windows, using separate builds and testing on actual Windows hardware |
 | Structure | Single-player, offline campaign; no multiplayer or account system in the first scope |
-| Gameplay code | Blueprint for rapid iteration; C++ where justified by complexity or performance |
+| Gameplay code | C++ for gameplay rules. Tuning values and mission beats as data, edited in the editor without a compile. Thin Blueprints for asset wiring only. See [decision 0001](decisions/0001-gameplay-code-in-cpp.md) |
 | Models | Tripo-generated starting assets, refined and checked in Blender |
 | Asset workflow | Generate, inspect, correct scale/materials, optimise, create collision, import and test |
 | Characters | Rigging, compatible skeletons, animation and retargeting need explicit setup and validation |
@@ -156,7 +156,7 @@ The prototype can use free starter content, simple meshes made in Blender and ap
 
 Generate assets during development and ship the resulting files. Keep API credentials in local development configuration and out of source control and distributed builds. The offline game does not need to call Tripo while players play.
 
-The AI assistant can help prepare code, scripts, Blueprint logic, asset specifications and debugging. Local Unreal editor operation, compilation and performance testing require access to the user’s Mac or user-run checks; this conversation does not currently provide direct access to that editor.
+The AI assistant can help prepare C++ code, Python editor scripts, data tables, asset specifications and debugging. Gameplay logic is not written in Blueprint ([decision 0001](decisions/0001-gameplay-code-in-cpp.md)). Local Unreal editor operation, compilation and performance testing require access to the user’s Mac or user-run checks; this conversation does not currently provide direct access to that editor.
 
 ## First playable milestone
 
