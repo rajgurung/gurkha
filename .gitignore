@@ -1,0 +1,26 @@
+# macOS
+.DS_Store
+
+# Unreal: generated folders, rebuilt by the editor
+game/**/Binaries/
+game/**/Build/
+game/**/DerivedDataCache/
+game/**/Intermediate/
+game/**/Saved/
+game/**/.vs/
+game/**/.idea/
+game/**/*.xcworkspace
+game/**/*.xcodeproj
+
+# Blender backup files
+*.blend1
+*.blend2
+
+# Local secrets (e.g. Tripo API key)
+.env
+.env.*
+
+# StaffOS: local config with token, and its Claude Code hooks (need the staffos CLI)
+.staffos.yml
+.claude/settings.json
+.claude/settings.local.json
