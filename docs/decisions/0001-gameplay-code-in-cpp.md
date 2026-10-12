@@ -85,3 +85,17 @@ None. The game designer and performance reviewer both approved with changes, and
 - Proposal: unreal-engineer
 - Reviews: game-designer, perf-qa
 - Merged by: producer (main session)
+
+## Notes
+
+12 October 2026: the project was created at `game/UntilDawn/` (`UntilDawn.uproject`) with module `UntilDawn`, not `Gurkha`. Unreal put the project in a subfolder. Paths in Planned layout map to:
+
+| Planned | Real |
+|---|---|
+| `game/Source/Gurkha/` | `game/UntilDawn/Source/UntilDawn/`, one subfolder per system |
+| `game/Source/Gurkha/Tests/` | `game/UntilDawn/Source/UntilDawn/Tests/` |
+| `game/Content/Gurkha/Data/` | `game/UntilDawn/Content/Gurkha/Data/` |
+| `game/Content/Gurkha/Blueprints/` | `game/UntilDawn/Content/Gurkha/Blueprints/` |
+| `game/Scripts/` | `game/UntilDawn/Scripts/` |
+
+12 October 2026: verified that Xcode 26.1.1 builds a 5.8.3 C++ project. The first editor build succeeded in 381 seconds.

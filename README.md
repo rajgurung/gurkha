@@ -10,5 +10,4 @@ Single-player historical war game about a fictional Gurkha soldier, from the Him
   - `until-dawn-gameplay-spec.md` gameplay spec for the first playable mission
   - `decisions/` decision records, indexed in `decisions/README.md`
   - `art/` concept art
-
-The game project (Unreal) and tools will live alongside `docs/` once started.
+- `game/UntilDawn/` Unreal project (`UntilDawn.uproject`), C++ module `UntilDawn`. Layout in [decision 0001](docs/decisions/0001-gameplay-code-in-cpp.md#notes)

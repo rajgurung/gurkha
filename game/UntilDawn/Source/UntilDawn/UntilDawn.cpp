@@ -1,0 +1,8 @@
+// Copyright Epic Games, Inc. All Rights Reserved.
+
+#include "UntilDawn.h"
+#include "Modules/ModuleManager.h"
+
+IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, UntilDawn, "UntilDawn" );
+
+DEFINE_LOG_CATEGORY(LogUntilDawn)

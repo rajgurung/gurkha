@@ -115,6 +115,7 @@ Rules:
 
 - An accepted record is never edited. A new record replaces it, and the old one is marked "Replaced by".
 - The summary must work on its own.
+- Factual corrections that do not change the decision (paths, measured results) go in a dated Notes section at the end of the record.
 
 ## Where things live
 

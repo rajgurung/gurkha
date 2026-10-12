@@ -113,7 +113,7 @@ The board is the approved artistic direction, not an actual screenshot or verifi
 
 | Area | Proposed specification |
 |---|---|
-| Engine | Unreal Engine 5.8 (current on 11 October 2026). Epic recommends Xcode 26.1.1, which is installed; minimum Xcode 26.0. Xcode 26.4 is listed as incompatible, so hold Xcode updates. Editor needs macOS 14.5 or later |
+| Engine | Unreal Engine 5.8 (current on 11 October 2026). Epic recommends Xcode 26.1.1, which is installed; minimum Xcode 26.0. Xcode 26.4 is listed as incompatible, so hold Xcode updates. Editor needs macOS 14.5 or later. Xcode 26 needs the Metal Toolchain installed separately (`xcodebuild -downloadComponent MetalToolchain`) |
 | Development hardware | MacBook Pro with Apple M1 Pro (16-core GPU), 16 GB unified memory, macOS 15.7, Xcode 26.1 (checked 11 October 2026) |
 | Initial platform | macOS on Apple Silicon. Minimum player spec: base M1 with 8 GB unified memory. Minimum OS version set by the selected engine |
 | Subsequent platform | Windows, using separate builds and testing on actual Windows hardware |
