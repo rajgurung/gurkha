@@ -5,6 +5,7 @@ Single-player historical war game about a fictional Gurkha soldier, from the Him
 ## Layout
 
 - `docs/` design documents
+  - `how-we-work.md` how the agent team plans, decides and documents
   - `story-and-technical-spec.md` story, art direction and technical plan
   - `until-dawn-gameplay-spec.md` gameplay spec for the first playable mission
   - `art/` concept art
