@@ -20,7 +20,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FDamagedDelegate, float, LifePercent
  *  Manages a weapon inventory through the IShooterWeaponHolder interface
  *  Manages health and death
  */
-UCLASS(abstract)
+UCLASS(abstract, config=Game)
 class UNTILDAWN_API AShooterCharacter : public AUntilDawnCharacter, public IShooterWeaponHolder
 {
 	GENERATED_BODY()
@@ -39,6 +39,14 @@ protected:
 	UPROPERTY(EditAnywhere, Category ="Input")
 	UInputAction* SwitchWeaponAction;
 
+	/** Reload input action */
+	UPROPERTY(EditAnywhere, Category ="Input")
+	UInputAction* ReloadAction;
+
+	/** Weapon given to the character at spawn */
+	UPROPERTY(EditAnywhere, Category ="Weapons")
+	TSubclassOf<AShooterWeapon> StartingWeaponClass;
+
 	/** Name of the first person mesh weapon socket */
 	UPROPERTY(EditAnywhere, Category ="Weapons")
 	FName FirstPersonWeaponSocket = FName("HandGrip_R");
@@ -50,6 +58,19 @@ protected:
 	/** Max distance to use for aim traces */
 	UPROPERTY(EditAnywhere, Category ="Aim", meta = (ClampMin = 0, ClampMax = 100000, Units = "cm"))
 	float MaxAimDistance = 10000.0f;
+
+	/** Cone half-angle of hip fire around the barrel. Default set in DefaultGame.ini */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Config, Category="Tuning|Weapons", meta = (ClampMin = 0, ClampMax = 45, Units = "deg"))
+	float HipFireSpreadDegrees = 4.0f;
+
+	/** Time to reload the weapon. Default set in DefaultGame.ini */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Config, Category="Tuning|Weapons", meta = (ClampMin = 0, Units = "s"))
+	float ReloadTime = 2.2f;
+
+	/** True while reloading. Aim drops and the weapon cannot fire */
+	bool bReloading = false;
+
+	FTimerHandle ReloadTimer;
 
 	/** Max HP this character can have */
 	UPROPERTY(EditAnywhere, Category="Health")
@@ -136,6 +157,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	void DoSwitchWeapon();
 
+	/** Handles reload input */
+	UFUNCTION(BlueprintCallable, Category="Input")
+	void DoReload();
+
+	/** Aim also drops while reloading */
+	virtual bool IsAiming() const override;
+
+	/** Also swaps the weapon meshes between the world rifle and the first person rifle */
+	virtual void SetFirstPersonView(bool bFirstPerson) override;
+
 public:
 
 	//~Begin IShooterWeaponHolder interface
@@ -173,6 +204,12 @@ protected:
 
 	/** Returns true if the character already owns a weapon of the given class */
 	AShooterWeapon* FindWeaponOfType(TSubclassOf<AShooterWeapon> WeaponClass) const;
+
+	/** Called from the reload timer to fill the magazine */
+	void FinishReload();
+
+	/** Shows the current weapon's first person mesh in the sights and its world mesh otherwise */
+	void UpdateWeaponView();
 
 	/** Called when this character's HP is depleted */
 	void Die();

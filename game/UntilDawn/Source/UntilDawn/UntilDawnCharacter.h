@@ -59,6 +59,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category ="Input")
 	UInputAction* AimAction;
 
+	/** Sprint (hold) Input Action */
+	UPROPERTY(EditAnywhere, Category ="Input")
+	UInputAction* SprintAction;
+
 	/** Multiplier applied to mouse look input. Default set in DefaultGame.ini */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Config, Category="Tuning|Look")
 	float MouseLookScale = 0.4f;
@@ -87,8 +91,19 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Config, Category="Tuning|Camera", meta = (Units = "cm"))
 	float CameraProbeRadius = 15.0f;
 
+	/** Movement speed when not sprinting */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Config, Category="Tuning|Movement", meta = (Units = "cm/s"))
+	float WalkSpeed = 600.0f;
+
+	/** Movement speed while sprinting */
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Config, Category="Tuning|Movement", meta = (Units = "cm/s"))
+	float SprintSpeed = 850.0f;
+
 	/** True while the aim input is held */
 	bool bAimHeld = false;
+
+	/** True while the sprint input is held */
+	bool bSprintHeld = false;
 
 	/** True while the first person arms are shown instead of the body */
 	bool bFirstPersonView = false;
@@ -135,6 +150,14 @@ protected:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoStopAiming();
 
+	/** Handles sprint start inputs from either controls or UI interfaces */
+	UFUNCTION(BlueprintCallable, Category="Input")
+	virtual void DoStartSprinting();
+
+	/** Handles sprint end inputs from either controls or UI interfaces */
+	UFUNCTION(BlueprintCallable, Category="Input")
+	virtual void DoStopSprinting();
+
 protected:
 
 	/** Set up input action bindings */
@@ -152,11 +175,11 @@ public:
 	/** Returns the third person camera boom **/
 	USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 
-	/** Returns true while the aim input is held */
-	bool IsAimHeld() const { return bAimHeld; }
+	/** Returns true while the character should be in the sights: aim is held and no action drops it (rule 1) */
+	virtual bool IsAiming() const { return bAimHeld && !bSprintHeld; }
 
 	/** Shows the first person arms (true) or the full body (false) to the owner */
-	void SetFirstPersonView(bool bFirstPerson);
+	virtual void SetFirstPersonView(bool bFirstPerson);
 
 };
 

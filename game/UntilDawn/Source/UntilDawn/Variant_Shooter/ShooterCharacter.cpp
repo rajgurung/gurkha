@@ -13,6 +13,8 @@
 #include "Camera/CameraComponent.h"
 #include "TimerManager.h"
 #include "ShooterGameMode.h"
+#include "UntilDawnCameraManager.h"
+#include "GameFramework/PlayerController.h"
 
 AShooterCharacter::AShooterCharacter()
 {
@@ -32,14 +34,21 @@ void AShooterCharacter::BeginPlay()
 
 	// update the HUD
 	OnDamaged.Broadcast(1.0f);
+
+	// give the starting weapon
+	if (StartingWeaponClass)
+	{
+		AddWeaponClass(StartingWeaponClass);
+	}
 }
 
 void AShooterCharacter::EndPlay(EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
 
-	// clear the respawn timer
+	// clear the respawn and reload timers
 	GetWorld()->GetTimerManager().ClearTimer(RespawnTimer);
+	GetWorld()->GetTimerManager().ClearTimer(ReloadTimer);
 }
 
 void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -56,6 +65,9 @@ void AShooterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCo
 
 		// Switch weapon
 		EnhancedInputComponent->BindAction(SwitchWeaponAction, ETriggerEvent::Triggered, this, &AShooterCharacter::DoSwitchWeapon);
+
+		// Reload
+		EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &AShooterCharacter::DoReload);
 	}
 
 }
@@ -122,7 +134,7 @@ void AShooterCharacter::DoJumpEnd()
 void AShooterCharacter::DoStartFiring()
 {
 	// fire the current weapon
-	if (CurrentWeapon && !IsDead())
+	if (CurrentWeapon && !IsDead() && !bReloading)
 	{
 		CurrentWeapon->StartFiring();
 	}
@@ -140,7 +152,7 @@ void AShooterCharacter::DoStopFiring()
 void AShooterCharacter::DoSwitchWeapon()
 {
 	// ensure we have at least two weapons two switch between
-	if (OwnedWeapons.Num() > 1 && !IsDead())
+	if (OwnedWeapons.Num() > 1 && !IsDead() && !bReloading)
 	{
 		// deactivate the old weapon
 		CurrentWeapon->DeactivateWeapon();
@@ -167,6 +179,56 @@ void AShooterCharacter::DoSwitchWeapon()
 	}
 }
 
+void AShooterCharacter::DoReload()
+{
+	if (!CurrentWeapon || IsDead() || bReloading)
+	{
+		return;
+	}
+
+	// reloading drops aim and stops firing. Aim comes back on its own if still held (decision 0002, rule 1)
+	bReloading = true;
+	CurrentWeapon->StopFiring();
+
+	GetWorld()->GetTimerManager().SetTimer(ReloadTimer, this, &AShooterCharacter::FinishReload, FMath::Max(ReloadTime, 0.01f), false);
+}
+
+void AShooterCharacter::FinishReload()
+{
+	bReloading = false;
+
+	if (CurrentWeapon)
+	{
+		CurrentWeapon->Refill();
+	}
+}
+
+bool AShooterCharacter::IsAiming() const
+{
+	return Super::IsAiming() && !bReloading;
+}
+
+void AShooterCharacter::SetFirstPersonView(bool bFirstPerson)
+{
+	Super::SetFirstPersonView(bFirstPerson);
+
+	UpdateWeaponView();
+}
+
+void AShooterCharacter::UpdateWeaponView()
+{
+	if (!CurrentWeapon)
+	{
+		return;
+	}
+
+	// the first person rifle is only ever seen by the owner, so hiding it from the owner hides it completely
+	CurrentWeapon->GetFirstPersonMesh()->SetOwnerNoSee(!bFirstPersonView);
+
+	// the world rifle follows the body: seen by the owner in third person, hidden in the sights
+	CurrentWeapon->GetThirdPersonMesh()->SetOwnerNoSee(bFirstPersonView);
+}
+
 void AShooterCharacter::AttachWeaponMeshes(AShooterWeapon* Weapon)
 {
 	const FAttachmentTransformRules AttachmentRule(EAttachmentRule::SnapToTarget, false);
@@ -176,8 +238,13 @@ void AShooterCharacter::AttachWeaponMeshes(AShooterWeapon* Weapon)
 
 	// attach the weapon meshes
 	Weapon->GetFirstPersonMesh()->AttachToComponent(GetFirstPersonMesh(), AttachmentRule, FirstPersonWeaponSocket);
-	Weapon->GetThirdPersonMesh()->AttachToComponent(GetMesh(), AttachmentRule, FirstPersonWeaponSocket);
-	
+	Weapon->GetThirdPersonMesh()->AttachToComponent(GetMesh(), AttachmentRule, ThirdPersonWeaponSocket);
+
+	// the world rifle is seen by the owner in third person. A world space representation is always hidden from the owner,
+	// so treat it as a normal mesh and keep its shadow while it is hidden for aiming
+	Weapon->GetThirdPersonMesh()->SetFirstPersonPrimitiveType(EFirstPersonPrimitiveType::None);
+	Weapon->GetThirdPersonMesh()->SetCastHiddenShadow(true);
+
 }
 
 void AShooterCharacter::PlayFiringMontage(UAnimMontage* Montage)
@@ -198,14 +265,35 @@ void AShooterCharacter::UpdateWeaponHUD(int32 CurrentAmmo, int32 MagazineSize)
 
 FVector AShooterCharacter::GetWeaponTargetLocation()
 {
-	// trace ahead from the camera viewpoint
+	FVector Start;
+	FVector Direction;
+
+	const APlayerController* PC = Cast<APlayerController>(GetController());
+	const AUntilDawnCameraManager* CameraManager = PC ? Cast<AUntilDawnCameraManager>(PC->PlayerCameraManager) : nullptr;
+
+	if (CameraManager && CameraManager->GetAimAlpha() >= 1.0f)
+	{
+		// fully in the sights: trace along the sight line
+		Start = CameraManager->GetCameraLocation();
+		Direction = CameraManager->GetCameraRotation().Vector();
+	}
+	else
+	{
+		// from the hip: trace from the world rifle's muzzle along the barrel, with spread (decision 0002, change 5).
+		// Never from the first person mesh, which is drawn with its own FOV and scale
+		const FTransform Muzzle = CurrentWeapon->GetThirdPersonMesh()->GetSocketTransform(CurrentWeapon->GetMuzzleSocketName());
+
+		Start = Muzzle.GetLocation();
+		Direction = FMath::VRandCone(Muzzle.GetUnitAxis(EAxis::X), FMath::DegreesToRadians(HipFireSpreadDegrees));
+	}
+
 	FHitResult OutHit;
 
-	const FVector Start = GetFirstPersonCameraComponent()->GetComponentLocation();
-	const FVector End = Start + (GetFirstPersonCameraComponent()->GetForwardVector() * MaxAimDistance);
+	const FVector End = Start + (Direction * MaxAimDistance);
 
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(this);
+	QueryParams.AddIgnoredActor(CurrentWeapon);
 
 	GetWorld()->LineTraceSingleByChannel(OutHit, Start, End, ECC_Visibility, QueryParams);
 
@@ -243,6 +331,9 @@ void AShooterCharacter::AddWeaponClass(const TSubclassOf<AShooterWeapon>& Weapon
 			// switch to the new weapon
 			CurrentWeapon = AddedWeapon;
 			CurrentWeapon->ActivateWeapon(PlayerTag);
+
+			// show the right rifle mesh for the current view
+			UpdateWeaponView();
 		}
 	}
 }

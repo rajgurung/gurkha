@@ -24,7 +24,7 @@ void AUntilDawnCameraManager::UpdateViewTarget(FTViewTarget& OutVT, float DeltaT
 	}
 
 	// move the aim alpha towards the held state at the in or out rate
-	if (Character->IsAimHeld())
+	if (Character->IsAiming())
 	{
 		AimAlpha = AimInTime > 0.0f ? FMath::Min(AimAlpha + DeltaTime / AimInTime, 1.0f) : 1.0f;
 	}

@@ -69,7 +69,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category="Aim", meta = (ClampMin = 0, ClampMax = 100))
 	float FiringRecoil = 0.0f;
 
-	/** Name of the first person muzzle socket where projectiles will spawn */
+	/** Name of the muzzle socket on the world (third person) mesh where projectiles will spawn */
 	UPROPERTY(EditAnywhere, Category="Aim")
 	FName MuzzleSocketName;
 
@@ -142,6 +142,9 @@ public:
 	/** Stop firing this weapon */
 	void StopFiring();
 
+	/** Fills the magazine */
+	void Refill();
+
 protected:
 
 	/** Fire the weapon */
@@ -171,6 +174,9 @@ public:
 
 	/** Returns the third person anim instance class */
 	const TSubclassOf<UAnimInstance>& GetThirdPersonAnimInstanceClass() const;
+
+	/** Returns the muzzle socket name */
+	FName GetMuzzleSocketName() const { return MuzzleSocketName; }
 
 	/** Returns the magazine size */
 	int32 GetMagazineSize() const { return MagazineSize; };

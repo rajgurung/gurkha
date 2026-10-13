@@ -77,6 +77,12 @@ void AUntilDawnCharacter::Tick(float DeltaSeconds)
 	CameraBoom->TargetArmLength = CameraArmLength;
 	CameraBoom->SocketOffset = FVector(0.0f, CameraShoulderOffset, 0.0f);
 	CameraBoom->ProbeSize = CameraProbeRadius;
+
+	// only the player sprints. Leave AI movement speeds to their own Blueprints
+	if (IsPlayerControlled())
+	{
+		GetCharacterMovement()->MaxWalkSpeed = bSprintHeld ? SprintSpeed : WalkSpeed;
+	}
 }
 
 void AUntilDawnCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -98,6 +104,10 @@ void AUntilDawnCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInput
 		// Aiming down the sights (hold)
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &AUntilDawnCharacter::DoStartAiming);
 		EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &AUntilDawnCharacter::DoStopAiming);
+
+		// Sprinting (hold)
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &AUntilDawnCharacter::DoStartSprinting);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AUntilDawnCharacter::DoStopSprinting);
 	}
 	else
 	{
@@ -119,7 +129,7 @@ void AUntilDawnCharacter::MoveInput(const FInputActionValue& Value)
 void AUntilDawnCharacter::LookInput(const FInputActionValue& Value)
 {
 	// get the Vector2D look axis, scaled by the gamepad sensitivity
-	FVector2D LookAxisVector = Value.Get<FVector2D>() * GamepadLookScale * (bAimHeld ? AimLookMultiplier : 1.0f);
+	FVector2D LookAxisVector = Value.Get<FVector2D>() * GamepadLookScale * (IsAiming() ? AimLookMultiplier : 1.0f);
 
 	// pass the axis values to the aim input
 	DoAim(LookAxisVector.X, LookAxisVector.Y);
@@ -129,7 +139,7 @@ void AUntilDawnCharacter::LookInput(const FInputActionValue& Value)
 void AUntilDawnCharacter::MouseLookInput(const FInputActionValue& Value)
 {
 	// get the Vector2D look axis, scaled by the mouse sensitivity
-	FVector2D LookAxisVector = Value.Get<FVector2D>() * MouseLookScale * (bAimHeld ? AimLookMultiplier : 1.0f);
+	FVector2D LookAxisVector = Value.Get<FVector2D>() * MouseLookScale * (IsAiming() ? AimLookMultiplier : 1.0f);
 
 	// pass the axis values to the aim input
 	DoAim(LookAxisVector.X, LookAxisVector.Y);
@@ -176,6 +186,16 @@ void AUntilDawnCharacter::DoStartAiming()
 void AUntilDawnCharacter::DoStopAiming()
 {
 	bAimHeld = false;
+}
+
+void AUntilDawnCharacter::DoStartSprinting()
+{
+	bSprintHeld = true;
+}
+
+void AUntilDawnCharacter::DoStopSprinting()
+{
+	bSprintHeld = false;
 }
 
 void AUntilDawnCharacter::SetFirstPersonView(bool bFirstPerson)

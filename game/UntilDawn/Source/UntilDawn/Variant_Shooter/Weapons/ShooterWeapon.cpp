@@ -126,6 +126,14 @@ void AShooterWeapon::StopFiring()
 	GetWorld()->GetTimerManager().ClearTimer(RefireTimer);
 }
 
+void AShooterWeapon::Refill()
+{
+	CurrentBullets = MagazineSize;
+
+	// update the weapon HUD
+	WeaponOwner->UpdateWeaponHUD(CurrentBullets, MagazineSize);
+}
+
 void AShooterWeapon::Fire()
 {
 	// ensure the player still wants to fire. They may have let go of the trigger
@@ -203,8 +211,9 @@ void AShooterWeapon::FireProjectile(const FVector& TargetLocation)
 
 FTransform AShooterWeapon::CalculateProjectileSpawnTransform(const FVector& TargetLocation) const
 {
-	// find the muzzle location
-	const FVector MuzzleLoc = FirstPersonMesh->GetSocketLocation(MuzzleSocketName);
+	// find the muzzle location on the world rifle. The first person mesh is drawn with its own FOV and scale,
+	// so its sockets are not where the rifle is in the world (decision 0002, change 5)
+	const FVector MuzzleLoc = ThirdPersonMesh->GetSocketLocation(MuzzleSocketName);
 
 	// calculate the spawn location ahead of the muzzle
 	const FVector SpawnLoc = MuzzleLoc + ((TargetLocation - MuzzleLoc).GetSafeNormal() * MuzzleOffset);

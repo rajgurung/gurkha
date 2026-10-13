@@ -46,6 +46,9 @@ public:
 	/** Constructor */
 	AUntilDawnCameraManager();
 
+	/** Returns 0 in third person, 1 fully in the sights */
+	float GetAimAlpha() const { return AimAlpha; }
+
 protected:
 
 	/** Blends the view target's POV between the boom and the sights */
