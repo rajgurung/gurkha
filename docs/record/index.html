@@ -116,7 +116,7 @@ footer{font:12px var(--mono);color:var(--muted);border-top:1px solid var(--line)
   <h1>Gurkha: The Long Way Home</h1>
   <p class="sub">Every decision, phase and result for the game, dated, in one place. First milestone: <b>Until Dawn</b>, a 10 to 15 minute night defence in Unreal Engine 5.8, playable on a base M1 with 8 GB.</p>
   <div class="meta">
-    <span>Last entry <b>13 Oct 2026 00:35</b></span>
+    <span>Last entry <b>13 Oct 2026 00:50</b></span>
     <span>Owner <b>Raj</b></span>
     <span>Repo <b><a href="https://github.com/rajgurung/gurkha">rajgurung/gurkha</a></b></span>
     <span>Source of truth <b>docs/ in the repo</b></span>
@@ -126,7 +126,7 @@ footer{font:12px var(--mono);color:var(--muted);border-top:1px solid var(--line)
 <section aria-labelledby="now">
   <h2 id="now">Where things stand <small>12 Oct 2026</small></h2>
   <div class="strip">
-    <div class="cell attn"><span class="k">Waiting on Raj</span><span class="v">Playtest the rifle</span><span class="muted">Fire, aim, Shift to sprint, R to reload. Known: rifle does not tilt with look in third person; sights not centred.</span></div>
+    <div class="cell attn"><span class="k">Next</span><span class="v">Pick the next pass</span><span class="muted">Rifle tilt and centred sights, or the bolt-action rifle.</span></div>
     <div class="cell"><span class="k">Last commit</span><span class="v">ccec9a4</span><span class="muted">Placeholder rifle, muzzle trace, sprint and reload.</span></div>
     <div class="cell"><span class="k">Current phase</span><span class="v">P3 Prototype</span><span class="muted">Unreal project exists. Camera build starts after 0002.</span></div>
     <div class="cell"><span class="k">Decisions</span><span class="v">2 accepted</span><span class="muted">Records live in docs/decisions/.</span></div>
@@ -148,7 +148,7 @@ footer{font:12px var(--mono);color:var(--muted);border-top:1px solid var(--line)
 
   <details class="dec" open>
     <summary>
-      <span class="num">0002</span><span class="ttl">Third-person camera, first person when aiming</span><span class="pill p-acc">Accepted · Stage 7 Review</span>
+      <span class="num">0002</span><span class="ttl">Third-person camera, first person when aiming</span><span class="pill p-acc">Accepted · Built</span>
       <span class="one">Play behind Bir's right shoulder. Hold aim to blend into the rifle sights. Main cost: full-body animations that look right from behind.</span>
     </summary>
     <div class="body">
@@ -278,6 +278,7 @@ footer{font:12px var(--mono);color:var(--muted);border-top:1px solid var(--line)
 
 <script>
 const diary = [
+  ["2026-10-13","00:50","P3","Raj playtested the rifle pass: looks great. 0002 first build closes stage 7. Everything is on main; no open branches. Open issues carried forward: rifle pitch in third person, centred sights, bolt-action behaviour.","ccec9a4"],
   ["2026-10-13","00:35","P3","Rifle pass built (138 s full, 9 to 11 s small edits). Player now a ShooterCharacter with the template rifle: third-person rifle animations, hip fire from the muzzle with 4° spread, aim along the sights, Shift sprint and R reload drop aim and resume it. Asset edits scripted. Found: rifle does not pitch with look in third person (inside ABP_TP_Rifle), sights not centred, template rifle is full auto.","ccec9a4"],
   ["2026-10-13","00:10","P3","Raj playtested: third person and the aim view switch work, but the test level has no weapon. Rifle pass started: Shooter weapon code, rifle animations, muzzle trace, aim drops on sprint and reload.","0002"],
   ["2026-10-12","18:55","P3","Camera prototype built (174 s): spring arm behind right shoulder, hold right mouse or left trigger to blend into the sights, FOV 72 to 65, aim look 0.6x. New IA_Aim input added headlessly. Third person confirmed by screenshot. Committed with the 0002 record and spec updates.","212b7e5"],
@@ -309,7 +310,7 @@ const facts = [
   ["Data table edits apply during Play in 5.8.3","unv","Not checked"],
   ["Third-person camera works in play","ver","Screenshot from -game run, 12 Oct"],
   ["Aim view switch works in play","ver","Raj playtest, 13 Oct"],
-  ["Firing, sprint, reload and aim drops work in play","unv","Built and screenshotted, not yet pressed in play"],
+  ["Firing, sprint, reload and aim drops work in play","ver","Raj playtest, 13 Oct"],
   ["Third-person rifle follows look pitch","unv","Logged run says no: barrel stays near level. Needs ABP_TP_Rifle fix"],
   ["Third-person camera, triangle and texture budgets","unv","Proposed in 0002, not profiled"],
 ];
